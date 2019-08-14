@@ -1,0 +1,36 @@
+version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:7.3.0
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+  logstash:
+    image: logstash:7.3.0
+    ports:
+      - 2888:5000
+  kibana:
+    image: kibana:7.3.0
+    ports:
+      - 3888:5601      
+  heartbeat:
+    image: store/elastic/heartbeat:7.3.0
+    environment:
+      - setup.kibana.host=kibana:5601
+      - output.elasticsearch.hosts=["elasticsearch:9200"]
+    volumes:
+      - "./config/heartbeat.docker.yml:/usr/share/heartbeat/heartbeat.yml:ro"
+  metricsbeat:
+    image: docker.elastic.co/beats/metricbeat:7.3.0
+    user: root
+    volumes:
+      - "./config/metricbeat.docker.yml:/usr/share/metricbeat/metricbeat.yml:ro"
+      - "./config/heartbeat.docker.yml:/usr/share/heartbeat/heartbeat.yml:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
+      - "/proc:/hostfs/proc:ro"
+      - "/:/hostfs:ro"
+    environment:
+      - output.elasticsearch.hosts=["elasticsearch:9200"]
