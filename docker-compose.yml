@@ -21,13 +21,13 @@ services:
       - setup.kibana.host=kibana:5601
       - output.elasticsearch.hosts=["elasticsearch:9200"]
     volumes:
-      - "./config/heartbeat.docker.yml:/usr/share/heartbeat/heartbeat.yml:ro"
+      - "./beats/heartbeat.docker.yml:/usr/share/heartbeat/heartbeat.yml:ro"
   metricsbeat:
     image: docker.elastic.co/beats/metricbeat:7.3.0
     user: root
     volumes:
-      - "./config/metricbeat.docker.yml:/usr/share/metricbeat/metricbeat.yml:ro"
-      - "./config/heartbeat.docker.yml:/usr/share/heartbeat/heartbeat.yml:ro"
+      - "./beats/metricbeat.docker.yml:/usr/share/metricbeat/metricbeat.yml:ro"
+      - "./beats/heartbeat.docker.yml:/usr/share/heartbeat/heartbeat.yml:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
       - "/proc:/hostfs/proc:ro"
