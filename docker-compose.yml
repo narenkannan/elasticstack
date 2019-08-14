@@ -22,7 +22,7 @@ services:
       - output.elasticsearch.hosts=["elasticsearch:9200"]
     volumes:
       - "./beats/heartbeat.docker.yml:/usr/share/heartbeat/heartbeat.yml:ro"
-  metricsbeat:
+  metricbeat:
     image: docker.elastic.co/beats/metricbeat:7.3.0
     user: root
     volumes:
